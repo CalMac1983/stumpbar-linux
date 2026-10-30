@@ -4,9 +4,7 @@ import html
 import re
 from dataclasses import dataclass
 
-import requests
-
-from scores import Match, overs_balls, wickets_first
+from scores import Match, get_json, overs_balls, wickets_first
 
 SUMMARY_URL = "https://site.web.api.espn.com/apis/site/v2/sports/cricket/{league}/summary?event={event}"
 
@@ -82,9 +80,7 @@ def parse_dismissal(text: str, batter_name: str = "") -> tuple[str, str, str]:
 def fetch_recent_balls(match: Match, timeout: float = 10) -> list[dict]:
     """The last ~18 balls of a match from ESPN's summary feed, oldest first."""
     url = SUMMARY_URL.format(league=match.league_id, event=match.id)
-    resp = requests.get(url, timeout=timeout)
-    resp.raise_for_status()
-    return recent_balls_from_summary(resp.json())
+    return recent_balls_from_summary(get_json(url, timeout))
 
 
 def recent_balls_from_summary(summary: dict) -> list[dict]:

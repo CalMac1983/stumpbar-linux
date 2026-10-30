@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "calmac.stumpbar",
+  "name": "Stumpbar",
+  "version": "2.0.0",
+  "author": "Cal Maclean",
+  "license": "MIT",
+  "description": "Live cricket scores in the Omarchy bar, with wicket alerts for a pinned match.",
+  "kinds": [
+    "service",
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "service": "Service.qml",
+    "barWidget": "Widget.qml"
+  },
+  "barWidget": {
+    "displayName": "Stumpbar",
+    "description": "Live cricket scores; pin a match to see its score in the bar and get wicket alerts.",
+    "category": "Info",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

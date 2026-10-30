@@ -1,9 +1,9 @@
 """Fetch and parse cricket scores from ESPN's public scoreboard feed."""
 
+import json
 import re
+import urllib.request
 from dataclasses import dataclass
-
-import requests
 
 FEED_URL = "https://site.web.api.espn.com/apis/v2/scoreboard/header?sport=cricket"
 
@@ -78,10 +78,15 @@ def overs_to(score: str, text: str) -> str:
     return re.sub(r"\b\d+(?:\.\d)? ov\b", text, score)
 
 
+def get_json(url: str, timeout: float = 10):
+    """GET a URL and parse the JSON body; raises on network errors and non-2xx responses."""
+    req = urllib.request.Request(url, headers={"User-Agent": "Stumpbar"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.load(resp)
+
+
 def fetch_matches(timeout: float = 10) -> list[Match]:
-    resp = requests.get(FEED_URL, timeout=timeout)
-    resp.raise_for_status()
-    data = resp.json()
+    data = get_json(FEED_URL, timeout)
 
     matches = []
     for sport in data.get("sports", []):
